@@ -1,3 +1,4 @@
+var common = require("common")
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
@@ -15,7 +16,7 @@ var roleUpgrader = {
         if(creep.memory.upgrading) {
             
             if(err = creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+                creep.moveTo(creep.room.controller, {visualizePathStyle: common.COLOR_PATH.upgrader.work});
             }
         }
         else {
@@ -27,7 +28,7 @@ var roleUpgrader = {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
             })
             if(creep.withdraw(containerWithEnergy, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(containerWithEnergy)
+                creep.moveTo(containerWithEnergy, {visualizePathStyle: common.COLOR_PATH.upgrader.refill})
             }
             // var sources = creep.room.find(FIND_SOURCES);
             // if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {

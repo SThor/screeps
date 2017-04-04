@@ -26,9 +26,9 @@ var  roleHarvester = {
             
             nearestAvailFlag = Game.flags[common.getAvailableMiningFlag()[0]];
             console.log(creep.name, creep.pos, nearestAvailFlag)
-            creep.moveTo(nearestAvailFlag);
+            creep.moveTo(nearestAvailFlag, {visualizePathStyle: common.COLOR_PATH.harvester.work});
             if( creep.harvest(nearestAvailFlag) == ERR_NOT_IN_RANGE ) {
-                creep.moveTo(nearestAvailFlag);
+                creep.moveTo(nearestAvailFlag, {visualizePathStyle: common.COLOR_PATH.harvester.work});
             }
         }
         

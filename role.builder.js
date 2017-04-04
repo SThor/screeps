@@ -18,7 +18,6 @@ var roleBuilder = {
             var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
             if(targets) {
                 if(creep.build(targets) == ERR_NOT_IN_RANGE) {
-                    creep.say(common.COLOR_PATH.builder.work)
                     creep.moveTo(targets, {visualizePathStyle: common.COLOR_PATH.builder.work});
                 }
             }else{
@@ -30,7 +29,6 @@ var roleBuilder = {
                 
                 if(targets) {
                     creep.say('🚧 repair');
-                    creep.say(common.COLOR_PATH.builder.work)
                     if(creep.repair(targets) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(targets, {visualizePathStyle: common.COLOR_PATH.builder.work});
                     }
@@ -43,7 +41,6 @@ var roleBuilder = {
             })
             if(containerWithEnergy){
                 if(creep.withdraw(containerWithEnergy, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.say(common.COLOR_PATH.builder.refill)
                     creep.moveTo(containerWithEnergy, {visualizePathStyle: common.COLOR_PATH.builder.refill})
                 }
             }else{

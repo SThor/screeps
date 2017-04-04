@@ -27,10 +27,10 @@ module.exports = {
         if(creep.carry.energy < creep.carryCapacity) {
 
             var target = Game.flags[creep.memory.base_flag];
-            creep.moveTo(target);
+            creep.moveTo(target, {visualizePathStyle: common.COLOR_PATH.carrier.refill});
             var targetEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
             if(creep.pickup(targetEnergy) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target);
+                creep.moveTo(target, {visualizePathStyle: common.COLOR_PATH.carrier.refill});
             }
         }else{
             // carry full capacity
@@ -38,7 +38,7 @@ module.exports = {
             // priority on the spawner
             if(Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
                 if(creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(Game.spawns['Spawn1']);
+                    creep.moveTo(Game.spawns['Spawn1'], {visualizePathStyle: common.COLOR_PATH.carrier.work});
                 }
                 return;
             }
@@ -51,7 +51,7 @@ module.exports = {
             // if no extension need refill, ignore
             if(closestExtensionNotFull){
                 if(err=creep.transfer(closestExtensionNotFull,RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(closestExtensionNotFull);
+                    creep.moveTo(closestExtensionNotFull, {visualizePathStyle: common.COLOR_PATH.carrier.work});
                 }
                 // console.log("[extension] : err", err)
                 return;
@@ -64,7 +64,7 @@ module.exports = {
             // if no extension need refill, ignore
             if(closestTowerNotFull){
                 if(err=creep.transfer(closestTowerNotFull,RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(closestTowerNotFull);
+                    creep.moveTo(closestTowerNotFull, {visualizePathStyle: common.COLOR_PATH.carrier.work});
                 }
                 // console.log("[Tower] : err", err)
                 return;
@@ -78,7 +78,7 @@ module.exports = {
             if(closestContainerNotFull){
                 // var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}});
                 if(err=creep.transfer(closestContainerNotFull,RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(closestContainerNotFull);
+                    creep.moveTo(closestContainerNotFull, {visualizePathStyle: common.COLOR_PATH.carrier.work});
                 }
                 // console.log("[container] : err", err)
                 return;

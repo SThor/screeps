@@ -25,6 +25,10 @@ module.exports = {
         builder : {
             work : {stroke: '#55FF55', lineStyle: 'dashed'},
             refill : {stroke: '#55FF55' }
+        },
+        upgrader : {
+            work : {stroke: '#DCDCDC', lineStyle: 'dashed'},
+            refill : {stroke: '#DCDCDC' }  
         }
     },
     getAvailableMiningFlag : function(){
