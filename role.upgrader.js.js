@@ -23,7 +23,6 @@ var roleUpgrader = {
             // if(creep.pickup(target) == ERR_NOT_IN_RANGE) {
             //     creep.moveTo(target);
             // }
-            console.log("ok ?")
             var containerWithEnergy = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
             })

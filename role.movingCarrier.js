@@ -53,7 +53,7 @@ module.exports = {
                 if(err=creep.transfer(closestExtensionNotFull,RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestExtensionNotFull);
                 }
-                console.log("[extension] : err", err)
+                // console.log("[extension] : err", err)
                 return;
             }
             
@@ -66,7 +66,7 @@ module.exports = {
                 if(err=creep.transfer(closestTowerNotFull,RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestTowerNotFull);
                 }
-                console.log("[Tower] : err", err)
+                // console.log("[Tower] : err", err)
                 return;
             }
     
@@ -80,7 +80,7 @@ module.exports = {
                 if(err=creep.transfer(closestContainerNotFull,RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestContainerNotFull);
                 }
-                console.log("[container] : err", err)
+                // console.log("[container] : err", err)
                 return;
             }
         }

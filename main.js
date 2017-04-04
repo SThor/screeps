@@ -109,11 +109,13 @@ module.exports = {
                 filter: (structure) => structure.hits < structure.hitsMax
             });
             if(closestDamagedStructure) {
+                console.log("🚧 repair")
                 tower.repair(closestDamagedStructure);
             }
     
             var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
             if(closestHostile) {
+                console.log("/!\ Attack")
                 tower.attack(closestHostile);
             }
         }

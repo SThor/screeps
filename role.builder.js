@@ -1,3 +1,5 @@
+var common = require("common")
+
 var roleBuilder = {
 
     /** @param {Creep} creep **/
@@ -16,7 +18,8 @@ var roleBuilder = {
             var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
             if(targets) {
                 if(creep.build(targets) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets, {visualizePathStyle: {stroke: '#ffffff'}});
+                    creep.say(common.COLOR_PATH.builder.work)
+                    creep.moveTo(targets, {visualizePathStyle: common.COLOR_PATH.builder.work});
                 }
             }else{
                 targets = creep.pos.findClosestByRange(FIND_STRUCTURES, {
@@ -27,8 +30,9 @@ var roleBuilder = {
                 
                 if(targets) {
                     creep.say('🚧 repair');
+                    creep.say(common.COLOR_PATH.builder.work)
                     if(creep.repair(targets) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(targets);
+                        creep.moveTo(targets, {visualizePathStyle: common.COLOR_PATH.builder.work});
                     }
                 }
             }
@@ -37,8 +41,17 @@ var roleBuilder = {
             var containerWithEnergy = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
             })
-            if(creep.withdraw(containerWithEnergy, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(containerWithEnergy)
+            if(containerWithEnergy){
+                if(creep.withdraw(containerWithEnergy, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.say(common.COLOR_PATH.builder.refill)
+                    creep.moveTo(containerWithEnergy, {visualizePathStyle: common.COLOR_PATH.builder.refill})
+                }
+            }else{
+             // in case of empty container
+                var targetEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+                if(creep.pickup(targetEnergy) == ERR_NOT_IN_RANGE) {
+                   creep.moveTo(targetEnergy, {visualizePathStyle: common.COLOR_PATH.builder.refill});
+                }
             }
             // var target = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
             // if(creep.pickup(target) == ERR_NOT_IN_RANGE) {
