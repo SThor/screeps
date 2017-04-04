@@ -12,7 +12,11 @@ module.exports = {
     run : function(creep){
         var err, flag, creep;
         var availFlag = [];
-        
+        var target, targetEnergy;
+        var closestExtensionNotFull;
+        var closestTowerNotFull;
+        var closestContainerNotFull;
+
         if(!creep.memory.base_flag){
             for (var f in Game.flags){
                 flag=Game.flags[f]
@@ -26,9 +30,11 @@ module.exports = {
         
         if(creep.carry.energy < creep.carryCapacity) {
 
-            var target = Game.flags[creep.memory.base_flag];
+            target = Game.flags[creep.memory.base_flag];
+            targetEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+
             creep.moveTo(target, {visualizePathStyle: common.COLOR_PATH.carrier.refill});
-            var targetEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+            
             if(creep.pickup(targetEnergy) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(target, {visualizePathStyle: common.COLOR_PATH.carrier.refill});
             }
@@ -44,7 +50,7 @@ module.exports = {
             }
             
             // find the closest extension not full of energy
-            var closestExtensionNotFull = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            closestExtensionNotFull = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => structure.structureType == STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity
             });
             
@@ -57,7 +63,7 @@ module.exports = {
                 return;
             }
             
-            var closestTowerNotFull = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            closestTowerNotFull = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity
             });
             
@@ -71,7 +77,7 @@ module.exports = {
             }
     
             // if spawner AND the extension got full energy, fill up container
-            var closestContainerNotFull = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            closestContainerNotFull = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] < 2000
             });
             

@@ -6,6 +6,7 @@ var common = require("common")
 
 module.exports = {
     loop : function () {
+
         var harvesters = [];
         var builders = [];
         var upgraders = [];
@@ -14,19 +15,28 @@ module.exports = {
         var flag;
         var nbCarrierFlag=0;
         var nbHarvesterFlag=0;
+        var buildersLimit = {};
+        var err;
+        var spawn;
+        var bodyHarvester, bodyCarrier, bodyBuilder, bodyUpgrader;
+
+        var closestDamagedStructure;
+        var closestHostile;
+        var tower, towers
+        
 
         for (var f in Game.flags){
-            flag=Game.flags[f]
+            flag=Game.flags[f];
             // check only miner flags
             if(flag.color == common.CARRIER_FLAG_COLOR){
-                nbCarrierFlag++
+                nbCarrierFlag++;
             }
             if(flag.color == common.MINING_FLAG_COLOR){
-                nbHarvesterFlag++
+                nbHarvesterFlag++;
             }
         }
-        var buildersLimit = {'upgrader':5, 'harvester':nbHarvesterFlag, 'builder' : 4, 'carrier': nbCarrierFlag*common.NB_CARRIER_BY_FLAG};
-        // console.log("CPU Start ", Game.cpu.getUsed(), "over", Game.cpu.limit);
+        
+        buildersLimit = {'upgrader':5, 'harvester':nbHarvesterFlag, 'builder':4, 'carrier':nbCarrierFlag*common.NB_CARRIER_BY_FLAG};
         
         for (var i in Game.creeps) {
             if(Game.creeps[i].memory.role == 'harvester') {
@@ -45,23 +55,27 @@ module.exports = {
             if(Game.creeps[i].memory.role == 'carrier') {
                 carriers.push(Game.creeps[i]);
                 roleMovingCarrier.run(Game.creeps[i], carriers, buildersLimit);
-                // roleCarrier.run(Game.creeps[i], carriers, buildersLimit);
             }
         }
         console.log("Carrier : " +carriers.length+ "/"+ buildersLimit.carrier +"[" + carriers.map(function(a){return a.name}).join(",") +"]" + " Upgrader : " +upgraders.length+ "/"+ buildersLimit.upgrader +"[" + upgraders.map(function(a){return a.name}).join(",") +"]" + " Builder : " +builders.length+"/"+buildersLimit.builder+ "[" + builders.map(function(a){return a.name}).join(",") +"]" +" Harvester "+ harvesters.length+ "/"+buildersLimit.harvester+"[" + harvesters.map(function(a){return a.name}).join(",") +"]"  )
         
         if(Game.spawns.Spawn1.room.energyAvailable > 200){
-            var err;
-            var spawn = Game.spawns.Spawn1;
+
+            /*
+            * cleanup Game.creeps
+            */
+            spawn = Game.spawns.Spawn1;
             for(var name in Memory.creeps) {
                 if(!Game.creeps[name]) {
                     delete Memory.creeps[name];
                     console.log('Clearing non-existing creep memory:', name);
                 }
             }
-            
+            /*
+            * Create HARVESTERS. (PRIORITY MAX)
+            */
             if(harvesters.length < buildersLimit.harvester ) {
-                var bodyHarvester = [WORK, WORK, MOVE]
+                bodyHarvester = [WORK, WORK, MOVE]
                 if(spawn.canCreateCreep(bodyHarvester, 'harvester_'+ Math.floor(Math.random()*1000)) == OK) {
                     spawn.createCreep(bodyHarvester, 'harvester_'+ Math.floor(Math.random()*1000), {role: 'harvester'});
                 }else{
@@ -70,8 +84,12 @@ module.exports = {
                 }
                 
             }
+
+            /*
+            * Create CARRIERS.
+            */
             if(carriers.length < buildersLimit.carrier ) {
-                var bodyCarrier = [MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+                bodyCarrier = [MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
                 if(spawn.canCreateCreep(bodyCarrier, 'carrier_'+ Math.floor(Math.random()*1000)) == OK) {
                     spawn.createCreep(bodyCarrier, 'carrier_'+ Math.floor(Math.random()*1000), {role: 'carrier'});
                 }else{
@@ -80,8 +98,11 @@ module.exports = {
                 }
             }
             
+            /*
+            * Create BUILDERS.
+            */
             if(builders.length < buildersLimit.builder ) {
-                var bodyBuilder = [WORK, WORK, CARRY, CARRY, MOVE, MOVE] //lol
+                bodyBuilder = [WORK, WORK, CARRY, CARRY, MOVE, MOVE] //lol
                 if(spawn.canCreateCreep(bodyBuilder, 'builder_'+ Math.floor(Math.random()*1000)) == OK) {
                     spawn.createCreep(bodyBuilder, 'builder_'+ Math.floor(Math.random()*1000),  {role: 'builder'});
                 }else{
@@ -89,9 +110,11 @@ module.exports = {
                     console.log(err < 0 ? "Cannot create creep Builder ("+err+")":"Builder created (err : "+err+")" );    
                 }
             }
-            
+            /*
+            * Create UPGRADERS.
+            */
             if(upgraders.length < buildersLimit.upgrader ) {
-                var bodyUpgrader = [MOVE,MOVE,WORK,CARRY,CARRY,CARRY,CARRY]
+                bodyUpgrader = [MOVE,MOVE,WORK,CARRY,CARRY,CARRY,CARRY]
                 if(spawn.canCreateCreep(bodyUpgrader, 'upgrader_'+ Math.floor(Math.random()*1000)) == OK) {
                     spawn.createCreep(bodyUpgrader, 'upgrader_'+ Math.floor(Math.random()*1000), {role: 'upgrader'});
                 }else{
@@ -102,24 +125,28 @@ module.exports = {
         }
     
         // console.log("CPU : Before tower ", Game.cpu.getUsed());
-        var tower = Game.getObjectById('TOWER_ID');
+        // var tower = Game.getObjectById('TOWER_ID');
+        towers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         
-        if(tower) {
-            var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (structure) => structure.hits < structure.hitsMax
-            });
-            if(closestDamagedStructure) {
-                console.log("🚧 repair")
-                tower.repair(closestDamagedStructure);
-            }
-    
-            var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-            if(closestHostile) {
-                console.log("/!\ Attack")
-                tower.attack(closestHostile);
+        if(towers.length > 0) {
+            for(t in towers){
+                tower = towers[t]
+                closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                    filter: (structure) => structure.hits < structure.hitsMax
+                });
+                if(closestDamagedStructure) {
+                    console.log("Tower repair");
+                    tower.repair(closestDamagedStructure);
+                }
+        
+                closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+                if(closestHostile) {
+                    console.log("Tower attack");
+                    tower.attack(closestHostile);
+                }
             }
         }
-        console.log("CPU end : ",Game.cpu.getUsed());
-        
+
+        console.log("CPU end : ",Game.cpu.getUsed());   
     }
 }

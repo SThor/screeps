@@ -4,18 +4,22 @@ var roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-
+        var containerWithEnergy;
+        var targetEnergy;
+        var targets;
+        
         if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
             creep.say('🔄 harvest');
         }
+
         if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
             creep.memory.building = true;
             creep.say('🚧 build');
         }
 
         if(creep.memory.building) {
-            var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+            targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
             if(targets) {
                 if(creep.build(targets) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets, {visualizePathStyle: common.COLOR_PATH.builder.work});
@@ -36,7 +40,7 @@ var roleBuilder = {
             }
         }
         else {
-            var containerWithEnergy = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            containerWithEnergy = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
             })
             if(containerWithEnergy){
@@ -45,7 +49,7 @@ var roleBuilder = {
                 }
             }else{
              // in case of empty container
-                var targetEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+                targetEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
                 if(creep.pickup(targetEnergy) == ERR_NOT_IN_RANGE) {
                    creep.moveTo(targetEnergy, {visualizePathStyle: common.COLOR_PATH.builder.refill});
                 }
