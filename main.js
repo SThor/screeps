@@ -128,27 +128,26 @@ module.exports = {
         // var tower = Game.getObjectById('TOWER_ID');
         
         // do not refill the tower if less than 500 energy are on the containers
-        if(common.totalEnergyAvailable < 500){
-            towers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-            
-            if(towers.length > 0) {
-                for(t in towers){
-                    tower = towers[t]
-                    closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                        filter: (structure) => {
-                            return (structure.hits < structure.hitsMax) || (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax/300000)
-                        }
-                    });
-                    if(closestDamagedStructure) {
-                        console.log("Tower repair");
-                        tower.repair(closestDamagedStructure);
+        
+        towers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+        
+        if(towers.length > 0) {
+            for(t in towers){
+                tower = towers[t]
+                closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.hits < structure.hitsMax) || (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax/300000)
                     }
-            
-                    closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-                    if(closestHostile) {
-                        console.log("Tower attack");
-                        tower.attack(closestHostile);
-                    }
+                });
+                if(closestDamagedStructure) {
+                    console.log("Tower repair");
+                    tower.repair(closestDamagedStructure);
+                }
+        
+                closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+                if(closestHostile) {
+                    console.log("Tower attack");
+                    tower.attack(closestHostile);
                 }
             }
         }

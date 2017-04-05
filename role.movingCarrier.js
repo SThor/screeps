@@ -66,16 +66,17 @@ module.exports = {
             closestTowerNotFull = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity
             });
-            
-            // if no extension need refill, ignore
-            if(closestTowerNotFull){
-                if(err=creep.transfer(closestTowerNotFull,RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(closestTowerNotFull, {visualizePathStyle: common.COLOR_PATH.carrier.work});
+            // do not refill the tower if containers are too low on supplie
+            if(common.totalEnergyAvailable > 500){
+                // if no extension need refill, ignore
+                if(closestTowerNotFull){
+                    if(err=creep.transfer(closestTowerNotFull,RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(closestTowerNotFull, {visualizePathStyle: common.COLOR_PATH.carrier.work});
+                    }
+                    // console.log("[Tower] : err", err)
+                    return;
                 }
-                // console.log("[Tower] : err", err)
-                return;
             }
-    
             // if spawner AND the extension got full energy, fill up container
             closestContainerNotFull = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] < 2000
