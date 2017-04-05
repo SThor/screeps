@@ -49,10 +49,10 @@ var roleBuilder = {
                 }
             }else{
              // in case of empty container
-                targetEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
-                if(creep.pickup(targetEnergy) == ERR_NOT_IN_RANGE) {
-                   creep.moveTo(targetEnergy, {visualizePathStyle: common.COLOR_PATH.builder.refill});
-                }
+                // targetEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
+                // if(creep.pickup(targetEnergy) == ERR_NOT_IN_RANGE) {
+                //   creep.moveTo(targetEnergy, {visualizePathStyle: common.COLOR_PATH.builder.refill});
+                // }
             }
             // var target = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
             // if(creep.pickup(target) == ERR_NOT_IN_RANGE) {

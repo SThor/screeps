@@ -36,7 +36,7 @@ module.exports = {
             }
         }
         
-        buildersLimit = {'upgrader':5, 'harvester':nbHarvesterFlag, 'builder':4, 'carrier':nbCarrierFlag*common.NB_CARRIER_BY_FLAG};
+        buildersLimit = {'upgrader':5, 'harvester':nbHarvesterFlag, 'builder':3, 'carrier':nbCarrierFlag*common.NB_CARRIER_BY_FLAG};
         
         for (var i in Game.creeps) {
             if(Game.creeps[i].memory.role == 'harvester') {
@@ -126,27 +126,32 @@ module.exports = {
     
         // console.log("CPU : Before tower ", Game.cpu.getUsed());
         // var tower = Game.getObjectById('TOWER_ID');
-        towers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         
-        if(towers.length > 0) {
-            for(t in towers){
-                tower = towers[t]
-                closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                    filter: (structure) => structure.hits < structure.hitsMax
-                });
-                if(closestDamagedStructure) {
-                    console.log("Tower repair");
-                    tower.repair(closestDamagedStructure);
-                }
-        
-                closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-                if(closestHostile) {
-                    console.log("Tower attack");
-                    tower.attack(closestHostile);
+        // do not refill the tower if less than 500 energy are on the containers
+        if(common.totalEnergyAvailable < 500){
+            towers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+            
+            if(towers.length > 0) {
+                for(t in towers){
+                    tower = towers[t]
+                    closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.hits < structure.hitsMax) || (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax/300000)
+                        }
+                    });
+                    if(closestDamagedStructure) {
+                        console.log("Tower repair");
+                        tower.repair(closestDamagedStructure);
+                    }
+            
+                    closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+                    if(closestHostile) {
+                        console.log("Tower attack");
+                        tower.attack(closestHostile);
+                    }
                 }
             }
         }
-
         console.log("CPU end : ",Game.cpu.getUsed());   
     }
 }

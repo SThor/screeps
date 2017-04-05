@@ -12,7 +12,8 @@
 module.exports = {
     MINING_FLAG_COLOR : COLOR_GREEN,
     CARRIER_FLAG_COLOR : COLOR_RED,
-    NB_CARRIER_BY_FLAG : 2, // multiplier
+    WAITING_FLAG_COLOR: COLOR_BROWN,
+    NB_CARRIER_BY_FLAG : 1.5, // multiplier
     COLOR_PATH : {
         harvester : {
             work : {stroke: '#FF5500', lineStyle: 'dashed'},
@@ -51,5 +52,18 @@ module.exports = {
         }
         // console.log(JSON.stringify(availFlag));
         return availFlag;
+    },
+    totalEnergyAvailable : function(room){
+        var energyAvailable = 0;
+        var container;
+        // Game.spawns.Spawn1.room.
+        var containers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {
+            filter: { structureType: STRUCTURE_CONTAINER }
+        });
+        for(var c in containers){
+            container = containers[c];
+            energyAvailable+=container.energyAvailable;
+        }
+        return energyAvailable;
     }
 };
