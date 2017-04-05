@@ -28,8 +28,13 @@ var roleUpgrader = {
             containerWithEnergy = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
             })
-            if(creep.withdraw(containerWithEnergy, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(containerWithEnergy, {visualizePathStyle: common.COLOR_PATH.upgrader.refill})
+            if(containerWithEnergy){
+                if(creep.withdraw(containerWithEnergy, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(containerWithEnergy, {visualizePathStyle: common.COLOR_PATH.upgrader.refill})
+                }
+            }else{
+                waitingZone = creep.pos.findClosestByRange(FIND_FLAGS, {filter : (f) => f.color == common.WAITING_FLAG_COLOR})
+                creep.moveTo(waitingZone, {visualizePathStyle: common.COLOR_PATH.upgrader.refill})
             }
             // var sources = creep.room.find(FIND_SOURCES);
             // if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
