@@ -16,20 +16,20 @@ module.exports = {
     NB_CARRIER_BY_FLAG : 1.5, // multiplier
     COLOR_PATH : {
         harvester : {
-            work : {stroke: '#FF5500', lineStyle: 'dashed'},
-            refill : {stroke: '#FF5500' }
+            work : {stroke: '#FF5500', lineStyle: 'dashed', opacity: .9},
+            refill : {stroke: '#FF5500', opacity: .9}
         },
         carrier : {
-            work : {stroke: '#FF55FF', lineStyle: 'dashed'},
-            refill : {stroke: '#FF55FF' }
+            work : {stroke: '#FF55FF', lineStyle: 'dashed', opacity: .9},
+            refill : {stroke: '#FF55FF', opacity: .9}
         },
         builder : {
             work : {stroke: '#55FF55', lineStyle: 'dashed'},
-            refill : {stroke: '#55FF55' }
+            refill : {stroke: '#55FF55', opacity: .9 }
         },
         upgrader : {
             work : {stroke: '#DCDCDC', lineStyle: 'dashed'},
-            refill : {stroke: '#DCDCDC' }  
+            refill : {stroke: '#DCDCDC', opacity: .9 }  
         }
     },
     getAvailableMiningFlag : function(){
@@ -57,13 +57,19 @@ module.exports = {
         var energyAvailable = 0;
         var container;
         // Game.spawns.Spawn1.room.
-        var containers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {
-            filter: { structureType: STRUCTURE_CONTAINER }
+        
+        containers =  Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {
+            filter: (structure) => structure.structureType == STRUCTURE_CONTAINER
         });
+        
         for(var c in containers){
             container = containers[c];
-            energyAvailable+=container.energyAvailable;
+            energyAvailable+=_.sum(container.store);
         }
+        
+        
         return energyAvailable;
+    
+        
     }
 };
