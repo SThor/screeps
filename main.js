@@ -127,8 +127,6 @@ module.exports = {
         // console.log("CPU : Before tower ", Game.cpu.getUsed());
         // var tower = Game.getObjectById('TOWER_ID');
         
-        // do not refill the tower if less than 500 energy are on the containers
-        
         towers = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
         
         if(towers.length > 0) {
