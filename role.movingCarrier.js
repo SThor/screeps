@@ -28,8 +28,30 @@ module.exports = {
             creep.memory.base_flag = availFlag[Math.floor(Math.random()*availFlag.length)]
         }
         
-        if(creep.carry.energy < creep.carryCapacity) {
+        if(creep.carry.energy == creep.carryCapacity){
+            creep.memory.filledUp = true;
+        }
+        
+        if(creep.memory.carrying && creep.carry.energy == 0) {
+            creep.memory.carrying = false;
+            creep.memory.filledUp = false
+            creep.say('🔄 back to harvester');
+        }
+        // if(if(!creep.memory.carrying)
+        if(creep.memory.filledUp){
+            if(creep.carry.energy > 0) {
+                creep.memory.carrying = true;
+                creep.say('🚧 carrying');
+            }
+        }else{
+            creep.memory.carrying = false;
+            // wait for filling up
+        }
+        
 
+        
+        // if(creep.carry.energy < creep.carryCapacity) {
+        if(!creep.memory.carrying){
             target = Game.flags[creep.memory.base_flag];
             targetEnergy = creep.pos.findClosestByRange(FIND_DROPPED_ENERGY);
 
