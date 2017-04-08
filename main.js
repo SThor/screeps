@@ -132,21 +132,26 @@ module.exports = {
         if(towers.length > 0) {
             for(t in towers){
                 tower = towers[t]
-                closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.hits < structure.hitsMax) || (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax/300000)
-                    }
-                });
-                if(closestDamagedStructure) {
-                    console.log("Tower repair");
-                    tower.repair(closestDamagedStructure);
-                }
-        
+                
                 closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
                 if(closestHostile) {
                     console.log("Tower attack");
                     tower.attack(closestHostile);
                 }
+                // repair only if 1/2 of the en,ergy is available (in case of attack, need to respond)
+                if(tower.energy > tower.energyCapacity/2){
+                    closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.hits < structure.hitsMax) && (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax/3000)
+                        }
+                    });
+                    if(closestDamagedStructure) {
+                        console.log("Tower repair");
+                        tower.repair(closestDamagedStructure);
+                    }
+                }
+        
+               
             }
         }
         console.log("CPU end : ",Game.cpu.getUsed());   
