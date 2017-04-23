@@ -25,13 +25,21 @@ var roleBuilder = {
                     creep.moveTo(targets, {visualizePathStyle: common.COLOR_PATH.builder.work});
                 }
             }else{
-                targets = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                    filter: object => object.hits < object.hitsMax
+                // targets = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                //     filter: object => object.hits < object.hitsMax
+                // });
+                targets = creep.pos.findInRange(FIND_STRUCTURES, 50, {
+                    filter: (structure) => {
+                        return ( structure.hits < structure.hitsMax)
+                            // ( (structure.hits < structure.hitsMax) && (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax/3000) ) ||
+                            // ( (structure.hits < structure.hitsMax) && (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax/300) ) 
+                    }
                 });
                 
-                // targets.sort((a,b) => a.hits - b.hits);
                 
                 if(targets) {
+                    targets.sort((a,b) => a.hits - b.hits);
+                    
                     creep.say('🚧 repair');
                     if(creep.repair(targets) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(targets, {visualizePathStyle: common.COLOR_PATH.builder.work});
@@ -41,7 +49,7 @@ var roleBuilder = {
         }
         else {
             containerWithEnergy = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
+                filter: (s) => (s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0) || (s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0)
             })
             if(containerWithEnergy){
                 if(creep.withdraw(containerWithEnergy, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

@@ -116,6 +116,18 @@ module.exports = {
                 // console.log("[container] : err", err)
                 return;
             }
+            
+            // if nothing left to refill
+            closestStorage = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => structure.structureType == STRUCTURE_STORAGE && creep.room.storage.store[RESOURCE_ENERGY] < structure.storeCapacity
+            });
+            console.log(closestStorage)
+            if(closestStorage){
+                if(err=creep.transfer(closestStorage,RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(closestStorage, {visualizePathStyle: common.COLOR_PATH.carrier.work});
+                }
+                return;
+            }
         }
     }
 };

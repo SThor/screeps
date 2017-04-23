@@ -13,6 +13,7 @@ module.exports = {
     MINING_FLAG_COLOR : COLOR_GREEN,
     CARRIER_FLAG_COLOR : COLOR_RED,
     WAITING_FLAG_COLOR: COLOR_BROWN,
+    CONTROLLER_TO_CLAIM:  ["57ef9dd386f108ae6e60e5b4"],
     NB_CARRIER_BY_FLAG : 1.5, // multiplier
     COLOR_PATH : {
         harvester : {
@@ -59,7 +60,7 @@ module.exports = {
         // Game.spawns.Spawn1.room.
         
         containers =  Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {
-            filter: (structure) => structure.structureType == STRUCTURE_CONTAINER
+            filter: (structure) => (structure.structureType == STRUCTURE_CONTAINER) || (structure.structureType == STRUCTURE_STORAGE)
         });
         
         for(var c in containers){

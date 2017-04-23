@@ -1,5 +1,5 @@
-var roleHarvester = require('role.harvester.js');
-var roleUpgrader = require('role.upgrader.js');
+var roleHarvester = require('role.harvester');
+var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleMovingCarrier = require('role.movingCarrier');
 var common = require("common")
@@ -36,7 +36,7 @@ module.exports = {
             }
         }
         
-        buildersLimit = {'upgrader':5, 'harvester':nbHarvesterFlag, 'builder':3, 'carrier':nbCarrierFlag*common.NB_CARRIER_BY_FLAG};
+        buildersLimit = {'upgrader':3, 'harvester':nbHarvesterFlag, 'builder':3, 'carrier':nbCarrierFlag*common.NB_CARRIER_BY_FLAG};
         
         for (var i in Game.creeps) {
             if(Game.creeps[i].memory.role == 'harvester') {
@@ -114,7 +114,7 @@ module.exports = {
             * Create UPGRADERS.
             */
             if(upgraders.length < buildersLimit.upgrader ) {
-                bodyUpgrader = [MOVE,MOVE,WORK,CARRY,CARRY,CARRY,CARRY]
+                bodyUpgrader = [MOVE, MOVE, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY]
                 if(spawn.canCreateCreep(bodyUpgrader, 'upgrader_'+ Math.floor(Math.random()*1000)) == OK) {
                     spawn.createCreep(bodyUpgrader, 'upgrader_'+ Math.floor(Math.random()*1000), {role: 'upgrader'});
                 }else{
@@ -138,18 +138,36 @@ module.exports = {
                     console.log("Tower attack");
                     tower.attack(closestHostile);
                 }
-                // repair only if 1/2 of the en,ergy is available (in case of attack, need to respond)
+                
                 if(tower.energy > tower.energyCapacity/2){
-                    closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                    var targets = tower.pos.findInRange(FIND_STRUCTURES, 50, {
                         filter: (structure) => {
-                            return (structure.hits < structure.hitsMax) && (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax/3000)
+                            return (
+                                    structure.structureType === STRUCTURE_EXTENSION ||
+                                    structure.structureType === STRUCTURE_ROAD ||
+                                    (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax/3000) ||
+                                    (structure.structureType === STRUCTURE_RAMPART && structure.hits < structure.hitsMax/300)
+                                ) && structure.hits < (structure.hitsMax*0.75)
                         }
                     });
-                    if(closestDamagedStructure) {
+                    if(targets) {
+                        targets.sort((a,b) => a.hits - b.hits);
                         console.log("Tower repair");
-                        tower.repair(closestDamagedStructure);
+                        tower.repair(targets[0]);
                     }
                 }
+                // repair only if 1/2 of the en,ergy is available (in case of attack, need to respond)
+                // if(tower.energy > tower.energyCapacity/2){
+                //     closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                //         filter: (structure) => {
+                //             return (structure.hits < structure.hitsMax) && (structure.structureType === STRUCTURE_WALL && structure.hits < structure.hitsMax/300)
+                //         }
+                //     });
+                //     if(closestDamagedStructure) {
+                //         console.log("Tower repair");
+                //         tower.repair(closestDamagedStructure);
+                //     }
+                // }
         
                
             }
