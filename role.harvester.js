@@ -1,3 +1,5 @@
+var utility = require('utility');
+
 var roleHarvester = {
 
     /** @param {Creep} creep **/
@@ -13,7 +15,6 @@ var roleHarvester = {
             creep.say('🔄 harvest');
         }
 
-
         if(creep.memory.state == "harvest") {
             
             //todo: pick up dropped ressources
@@ -21,7 +22,7 @@ var roleHarvester = {
             var sources =creep.room.find(FIND_SOURCES);
             sources = _.sortBy(sources, s => creep.pos.getRangeTo(s));
             if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                utility.travelTo(creep, sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
         else {
@@ -34,7 +35,7 @@ var roleHarvester = {
             targets = _.sortBy(targets, t => creep.pos.getRangeTo(t));
             if(targets.length > 0) {
                 if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                    utility.travelTo(creep, targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
         }

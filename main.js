@@ -30,4 +30,23 @@ module.exports.loop = function () {
             roleRepairer.run(creep);
         }
     }
+
+    // Add road construction request
+    if(Game.time % 10 == 0)
+    {
+      // Find highest requested position
+      var max = {
+        value:0
+        } 
+      for(var key in Memory.room.keys)
+      {
+        if(max.value < Memory.room[key])
+        {
+          max.value = Memory.room[key]
+          max.key = key
+        }
+      }
+      console.log("Building " + max.value)
+      Room.createConstructionsite(max.key)
+    }
 }
