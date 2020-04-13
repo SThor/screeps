@@ -17,7 +17,7 @@ var roleBuilder = {
 
         if(creep.memory.state == "build") {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            targets = targets.sort((a,b)=>a.progress>b.progress)
+            targets = targets.sort((a,b)=>a.progress<b.progress)
             if(targets.length) {
                 if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     utility.travelTo(creep, targets[0], {visualizePathStyle: {stroke: '#ffffff'}});

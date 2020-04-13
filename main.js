@@ -31,7 +31,7 @@ module.exports.loop = function () {
         }
     }
 
-    // Add road construction request
+    // Add road construction request if there are less than a fixed numbers TODO: than builders in the room?
     if(Game.time % 50 == 0)
     {
       console.log("Let's build cette biatch")
@@ -41,12 +41,8 @@ module.exports.loop = function () {
         }
       if(!Memory.room) Memory.room = {}
 
-      console.log(Object.values(Memory.room))
-      console.log(Object.keys(Memory.room))
-
       for(var key of Object.keys(Memory.room))
       {
-        console.log(key + " "  + Memory.room[key])
         if(max.value < Memory.room[key])
         {
           max.value = Memory.room[key]
@@ -56,13 +52,25 @@ module.exports.loop = function () {
 
       if(max.value > 0)
       {
-        console.log("Building " + max.value)
-        var  keyArray = max.key.split(' ')
+        console.log("Building " + max.value + " at " + max.key)
+        var keyArray = max.key.split(' ')
         var posArray = keyArray[3].split(',')
-        var ret = Game.rooms[keyArray[1]].createConstructionSite(parseInt(posArray[0]), parseInt(posArray[1]), STRUCTURE_ROAD)
-        console.log("Result " + ret)
+        var roomToBuild = Game.rooms[keyArray[1]]
+        if(roomToBuild.find(FIND_MY_CONSTRUCTION_SITES).length < 5)
+        {
+          var ret = roomToBuild.createConstructionSite(parseInt(posArray[0]), parseInt(posArray[1]), STRUCTURE_ROAD)
+          console.log("Result " + ret)
+        }
+        else
+        {
+          console.log("Too many sites. Let's wait" + roomToBuild.find(FIND_MY_CONSTRUCTION_SITES).length )
+        }
         // remove count
         delete Memory.room[max.key]
+      }
+      else
+      {
+        console.log("Noone wants anything.")
       }
     }
 }
