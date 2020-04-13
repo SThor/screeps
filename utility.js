@@ -4,7 +4,9 @@ module.exports = {
     if(creep.memory.role != "builder")
     {
       // If there is no road or TODO construction site here
-      if(creep.room.lookAt(creep.pos).filter(obj => obj.type == 'structure' && obj.structure.StructureType == STRUCTURE_ROAD).length == 0)
+      var structures = creep.room.lookAt(creep.pos);
+      structures.filter(obj => obj.type == 'structure' && obj.structure.structureType == STRUCTURE_ROAD)
+      if(structures.length == 0)
       {
         // Check room memory and breadcrumb existence
         if(!Memory.room) Memory.room = {}
