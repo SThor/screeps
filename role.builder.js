@@ -4,12 +4,13 @@ var roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+        if(!creep.memory.state) creep.memory.state = "harvest";
 
         if(creep.memory.state == "build" && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.state = "harvest";
             creep.say('🔄 harvest');
         }
-        if(creep.memory.state != "build" && creep.store.getFreeCapacity() == 0) {
+        if(creep.memory.state == "harvest" && creep.store.getFreeCapacity() == 0) {
             creep.memory.state = "build";
             creep.say('🚧 build');
         }

@@ -1,6 +1,16 @@
 var utility = require('utility');
 
 var roleHarvester = {
+    pickupRessources: function(creep){
+        const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+        if(target) {
+            if(creep.pickup(target) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
+            }
+            return true
+        }
+        return false
+    },
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -18,6 +28,9 @@ var roleHarvester = {
         if(creep.memory.state == "harvest") {
             
             //todo: pick up dropped ressources
+            if(this.pickupRessources(creep)){
+                return;
+            }
             
             var sources =creep.room.find(FIND_SOURCES);
             sources = _.sortBy(sources, s => creep.pos.getRangeTo(s));

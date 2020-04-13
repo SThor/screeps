@@ -4,12 +4,13 @@ var roleRepairer = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+        if(!creep.memory.state) creep.memory.state = "harvest";
 
-        if(creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
+        if(creep.memory.state == "repair" && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.state = "harvest";
             creep.say('🔄 harvest');
         }
-        if(!creep.memory.building && creep.store.getFreeCapacity() == 0) {
+        if(creep.memory.state == "harvest" && creep.store.getFreeCapacity() == 0) {
             creep.memory.state = "repair";
             creep.say('🚧 repair');
         }
@@ -18,9 +19,10 @@ var roleRepairer = {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: object => object.hits < object.hitsMax
             });
-            targets.sort((a,b) => a.hits - b.hits);
+            targets.sort((a,b) => (a.hits/a.hitsMax) - (b.hits/b.hitsMax));
+            // targets = _.sortBy(targets, s => creep.pos.getRangeTo(s));
             if(targets.length) {
-                if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
+                if(creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
                     utility.travelTo(creep, targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
