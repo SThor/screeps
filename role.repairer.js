@@ -1,4 +1,4 @@
-var roleBuilder = {
+var roleRepairer = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -8,12 +8,15 @@ var roleBuilder = {
             creep.say('🔄 harvest');
         }
         if(!creep.memory.building && creep.store.getFreeCapacity() == 0) {
-            creep.memory.state = "build";
-            creep.say('🚧 build');
+            creep.memory.state = "repair";
+            creep.say('🚧 repair');
         }
 
-        if(creep.memory.state == "build") {
-            var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+        if(creep.memory.state == "repair") {
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                filter: object => object.hits < object.hitsMax
+            });
+            targets.sort((a,b) => a.hits - b.hits);
             if(targets.length) {
                 if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
@@ -29,4 +32,4 @@ var roleBuilder = {
     }
 };
 
-module.exports = roleBuilder;
+module.exports = roleRepairer;
