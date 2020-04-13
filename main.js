@@ -62,7 +62,7 @@ module.exports.loop = function () {
         var ret = Game.rooms[keyArray[1]].createConstructionSite(parseInt(posArray[0]), parseInt(posArray[1]), STRUCTURE_ROAD)
         console.log("Result " + ret)
         // remove count
-        Memory.room[max.key] = 0
+        delete Memory.room[max.key]
       }
     }
 }
