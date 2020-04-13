@@ -1,3 +1,5 @@
+var utility = require('utility');
+
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
@@ -14,13 +16,13 @@ var roleUpgrader = {
 
         if(creep.memory.upgrading) {
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+                utility.travelTo(creep, creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
         else {
             var source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
             if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+                utility.travelTo(creep, source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
     }

@@ -1,3 +1,5 @@
+var utility = require('utility');
+
 var roleRepairer = {
 
     /** @param {Creep} creep **/
@@ -19,14 +21,14 @@ var roleRepairer = {
             targets.sort((a,b) => a.hits - b.hits);
             if(targets.length) {
                 if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                    utility.travelTo(creep, targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
         }
         else {
             var source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
             if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+                utility.travelTo(creep, source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
     }
