@@ -18,7 +18,7 @@ module.exports.loop = function () {
     spawner.run()
     var towers = Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
         filter: (s) => {
-            return s.structureType === STRUCTURE_TOWER;
+            return s.structureType == STRUCTURE_TOWER;
       }});
     for(var tower of towers){
         structTower.run(tower);
@@ -69,13 +69,13 @@ module.exports.loop = function () {
         {
           var ret = roomToBuild.createConstructionSite(parseInt(posArray[0]), parseInt(posArray[1]), STRUCTURE_ROAD)
           console.log("Result " + ret)
+            // remove count
+            delete Memory.room[max.key]
         }
         else
         {
           console.log("Too many sites. Let's wait" + roomToBuild.find(FIND_MY_CONSTRUCTION_SITES).length )
         }
-        // remove count
-        delete Memory.room[max.key]
       }
       else
       {
