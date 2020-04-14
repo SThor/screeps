@@ -13,7 +13,7 @@ module.exports.loop = function () {
         }
     }
     
-    spawner.run()
+    spawner.run(Game.spawns['Spawn1'])
     
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
