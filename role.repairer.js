@@ -16,22 +16,22 @@ var roleRepairer = {
         }
 
         if(creep.memory.state == "repair") {
-            if(typeof creep.memory.target == 'undefined'){
+            if(typeof creep.memory.targetID == 'undefined'){
                 var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: object => object.hits < object.hitsMax
                 });
                 targets.sort((a,b) => (a.hits/a.hitsMax) - (b.hits/b.hitsMax));
                 // targets = _.sortBy(targets, s => creep.pos.getRangeTo(s));
                 if(targets.length) {
-                    creep.memory.target = targets[0];
+                    creep.memory.targetID = targets[0].id;
                 }
             }
-            let tmpTarget = Game.getObjectById(creep.memory.target.id)
+            let tmpTarget = Game.getObjectById(creep.memory.targetID)
             let errCode = creep.repair(tmpTarget)
             if(errCode == ERR_NOT_IN_RANGE){
                 utility.travelTo(creep, tmpTarget, {visualizePathStyle: {stroke: '#ffffff'}});
             }else if(tmpTarget.hits/tmpTarget.hitsMax > 0.5) {
-                delete creep.memory.target;
+                delete creep.memory.targetID;
             }
         }
         else {
