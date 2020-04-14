@@ -20,10 +20,7 @@ var roleUpgrader = {
             }
         }
         else {
-            var source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                utility.travelTo(creep, source, {visualizePathStyle: {stroke: '#ffaa00'}});
-            }
+          utility.harvestFood(creep);
         }
     }
 };
