@@ -2,7 +2,9 @@ const defaultBody = [WORK,CARRY,MOVE]
 
 module.exports = {
     genBody: function(){
-        if(Game.spawns['Spawn1'].room.energyAvailable>=500){
+        if(Game.spawns['Spawn1'].room.energyAvailable>=800){
+            return [WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE]
+        }else if(Game.spawns['Spawn1'].room.energyAvailable>=500){
             return [WORK,WORK,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE]
         }else if(Game.spawns['Spawn1'].room.energyAvailable>=300){
             return [WORK,CARRY,CARRY,MOVE,MOVE]
@@ -23,7 +25,7 @@ module.exports = {
         }else if(upgraders.length<2){
             Game.spawns['Spawn1'].spawnCreep(this.genBody(), 'Upgrader' + Game.time,{memory: {role: 'upgrader'}});
             console.log('Spawning Upgrader at Spawn1');
-        }else if(builders.length<2){
+        }else if(builders.length<3){
             Game.spawns['Spawn1'].spawnCreep(this.genBody(), 'Builder' + Game.time,{memory: {role: 'builder'}});
             console.log('Spawning Builder at Spawn1');
         }else if(repairers.length<2){
