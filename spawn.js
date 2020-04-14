@@ -20,7 +20,6 @@ module.exports = {
         if(errCode==OK){
             if(Memory.forceSmall){
                 delete Memory.forceSmall;
-                delete Memory.spawnTries;
                 console.log('Spawning tiny'+creepRole+' at '+spawn.name);        
             }else{
                 console.log('Spawning '+creepRole+' at '+spawn.name);
@@ -31,6 +30,7 @@ module.exports = {
             if(Memory.spawnTries > 30){
                 console.log('Failed to spawn '+creepRole+' for '+Memory.spawnTries+' ticks.');
                 Memory.forceSmall = true
+                delete Memory.spawnTries;
             }
         }
     },
