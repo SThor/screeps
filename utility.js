@@ -20,7 +20,7 @@ module.exports = {
   },
 
   harvestFood: function(creep) { // TODO: remember chosen source so that we don't flip flop
-    // Llist all sources sorted by range
+    // List all sources sorted by range
     var sources = creep.room.find(FIND_SOURCES);
     sources = _.sortBy(sources, s => creep.pos.getRangeTo(s));
     // Try to harvest closest one
@@ -29,7 +29,7 @@ module.exports = {
       // If we can't, go to closest accessible one
       for(var source of sources)
       {
-        if(module.exports.travelTo(creep, source, {visualizePathStyle: {stroke: '#ffaa00'}}) == OK) { break; }
+        if(this.travelTo(creep, source, {visualizePathStyle: {stroke: '#ffaa00'}}) == OK) { break; }
       }
     }
   }
