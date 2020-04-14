@@ -31,12 +31,7 @@ var roleHarvester = {
             if(this.pickupRessources(creep)){
                 return;
             }
-            
-            var sources =creep.room.find(FIND_SOURCES);
-            sources = _.sortBy(sources, s => creep.pos.getRangeTo(s));
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                utility.travelTo(creep, sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-            }
+          utility.harvestFood(creep);  
         }
         else {
             var targets = creep.room.find(FIND_STRUCTURES, {
