@@ -15,7 +15,7 @@ module.exports.loop = function () {
         }
     }
     
-    spawner.run()
+    spawner.run(Game.spawns['Spawn1'])
     var towers = Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
         filter: (s) => {
             return s.structureType == STRUCTURE_TOWER;
