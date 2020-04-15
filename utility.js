@@ -16,7 +16,21 @@ module.exports = {
       }
     }
     // move
-    creep.moveTo(target, opts)
-  }
-}
+    return creep.moveTo(target, opts)
+  },
 
+  harvestFood: function(creep) { // TODO: remember chosen source so that we don't flip flop
+    // List all sources sorted by range
+    var sources = creep.room.find(FIND_SOURCES);
+    sources = _.sortBy(sources, s => creep.pos.getRangeTo(s));
+    // Try to harvest closest one
+    if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) 
+    {
+      // If we can't, go to closest accessible one
+      for(var source of sources)
+      {
+        if(this.travelTo(creep, source, {visualizePathStyle: {stroke: '#ffaa00'}}) == OK) { break; }
+      }
+    }
+  }
+};
