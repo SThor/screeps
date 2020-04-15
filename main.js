@@ -2,6 +2,8 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
+var structTower = require('struct.tower');
+
 
 var spawner = require('spawn');
 
@@ -14,6 +16,13 @@ module.exports.loop = function () {
     }
     
     spawner.run(Game.spawns['Spawn1'])
+    var towers = Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
+        filter: (s) => {
+            return s.structureType == STRUCTURE_TOWER;
+      }});
+    for(var tower of towers){
+        structTower.run(tower);
+    }
     
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
@@ -60,13 +69,13 @@ module.exports.loop = function () {
         {
           var ret = roomToBuild.createConstructionSite(parseInt(posArray[0]), parseInt(posArray[1]), STRUCTURE_ROAD)
           console.log("Result " + ret)
+            // remove count
+            delete Memory.room[max.key]
         }
         else
         {
           console.log("Too many sites. Let's wait" + roomToBuild.find(FIND_MY_CONSTRUCTION_SITES).length )
         }
-        // remove count
-        delete Memory.room[max.key]
       }
       else
       {
