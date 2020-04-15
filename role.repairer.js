@@ -9,6 +9,7 @@ var roleRepairer = {
         if(creep.memory.state == "repair" && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.state = "harvest";
             creep.say('🔄 harvest');
+            delete creep.memory.targetID;
         }
         if(creep.memory.state == "harvest" && creep.store.getFreeCapacity() == 0) {
             creep.memory.state = "repair";
@@ -35,7 +36,7 @@ var roleRepairer = {
             }
         }
         else {
-          utility.harvestFood(creep);
+            utility.harvestFood(creep);
         }
     }
 };
