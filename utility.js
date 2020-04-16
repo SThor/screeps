@@ -22,7 +22,9 @@ module.exports = {
     }
     else if (target.hasOwnProperty('path')) // target is actually a path
     {
-      new RoomVisual(creep.room).poly(target, opts);
+      let style = opts.visualizePathStyle
+      style.lineStyle = "dashed"
+      new RoomVisual(creep.room.name).poly(target.path, style);
       return creep.moveByPath(target.path)
     }
     else
@@ -39,9 +41,8 @@ module.exports = {
       let room = Game.rooms[roomName];
       let costs = new PathFinder.CostMatrix;
 
-      if(!room)
+      if(!room) // let's not go through the rooms we can't see
       {
-        console.log("Room " + room + " doesn't exist");
         return;
       }
 
@@ -63,7 +64,6 @@ module.exports = {
 
       global.costs[roomName] = costs
       global.lastComputed = Game.time
-      console.log("Costs computed")
     }
 
     return global.costs[roomName];
@@ -91,7 +91,7 @@ module.exports = {
                                      })
         if(path.incomplete == false)
         {
-          console.log(this.travelTo(creep, path, {visualizePathStyle: {stroke: '#ffaa00'}}))
+          this.travelTo(creep, path, {visualizePathStyle: {stroke: '#ffaa00'}});
           break;
         }
       }
