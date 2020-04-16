@@ -31,7 +31,7 @@ var roleRepairer = {
             let errCode = creep.repair(tmpTarget)
             if(errCode == ERR_NOT_IN_RANGE){
                 utility.travelTo(creep, tmpTarget, {visualizePathStyle: {stroke: '#ffffff'}});
-            }else if(tmpTarget != null && tmpTarget.hits/tmpTarget.hitsMax > 0.5) {
+            }else if(tmpTarget == null || tmpTarget.hits/tmpTarget.hitsMax > 0.5) {
                 delete creep.memory.targetID;
             }
         }
