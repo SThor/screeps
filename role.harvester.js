@@ -16,11 +16,11 @@ var roleHarvester = {
     run: function(creep) {
         if(!creep.memory.state) creep.memory.state = "harvest";
 
-        if(creep.memory.state == "harvest" && creep.store.getFreeCapacity() == 0) {
+        if(creep.memory.state == "harvest" && creep.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
             creep.memory.state = "recharge";
             creep.say('⚡ recharge');
         }
-        if(creep.memory.state == "recharge" && creep.store.getUsedCapacity() == 0) {
+        if(creep.memory.state == "recharge" && creep.store.getUsedCapacity(RESOURCE_ENERGY) == 0) {
             creep.memory.state = "harvest";
             creep.say('🔄 harvest');
         }
