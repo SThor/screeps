@@ -40,7 +40,7 @@ module.exports = {
         var builders = _.filter(Game.creeps, (creep)=>creep.memory.role=='builder');
         var upgraders = _.filter(Game.creeps, (creep)=>creep.memory.role=='upgrader');
         var repairers = _.filter(Game.creeps, (creep)=>creep.memory.role=='repairer');
-        
+        var scouts = _.filter(Game.creeps, (creep)=>creep.memory.role=='scout');
 
         if(harvesters.length<3){
             this.spawn(spawn,"harvester");
@@ -50,6 +50,8 @@ module.exports = {
             this.spawn(spawn,"builder");
         }else if(repairers.length<2){
             this.spawn(spawn,"repairer");
+        }else if(scouts.length<1){
+            this.spawn(spawn,"scout");
         }
         
         if(spawn.spawning) {

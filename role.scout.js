@@ -7,16 +7,30 @@ var roleScout = {
       // Setup
       if(!Memory.visitedRooms) Memory.visitedRooms = [] 
 
-      // Find exit (if there is none yet)
-      exits = creep.room.find(FIND_EXIT);
-      for(var exit of exits)
+      if(!creep.memory.target)
       {
-        console.log(exit)
-        if(!Memory.visitedRooms.filter(room => room == exit.room))
+        // Find exit (if there is none yet)
+        creep.memory.startingRoom = creep.room.name;
+        exits = Game.map.describeExits(creep.room.name)
+        for(var exit in exits)
         {
-          console.log("adding " + exit);
-          Memory.visitedRooms.push(exit.room);
+          console.log(exits[exit])
+          if(Memory.visitedRooms.filter((room) => room == exits[exit]).length == 0)
+          {
+            creep.memory.target = creep.room.findExitTo(exits[exit])
+            break;
+          }
         }
+      }
+      else if(creep.memory.target.roomName == creep.memory.startingRoom)
+      {
+        // we made it :) let's start over
+        Memory.visitedRooms.push(creep.room.name);
+        delete creep.memory.target;
+      }
+      else
+      {
+        utility.travelTo(creep, creep.memory.target);
       }
 
     }
