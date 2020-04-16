@@ -51,7 +51,7 @@ module.exports = {
           costs.set(struct.pos.x, struct.pos.y, 1);
         } else if (struct.structureType !== STRUCTURE_CONTAINER &&
                    (struct.stuctureType !== STRUCTURE_RAMPART ||
-                    !sttruct.my)) {
+                    !struct.my)) {
           costs.set(struct.pos.x, struct.pos.y, 0xff);
         }
       });
