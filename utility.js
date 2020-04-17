@@ -72,6 +72,7 @@ module.exports = {
   harvestFood: function(creep) { // TODO: remember chosen source so that we don't flip flop
     // List all sources sorted by range
     let sources = creep.room.find(FIND_SOURCES);
+    sources = sources.filter(s => s.store.getFreeCapacity() > 0);
     sources = _.sortBy(sources, s => creep.pos.getRangeTo(s));
     // Try to harvest closest one
     if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) 

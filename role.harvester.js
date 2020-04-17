@@ -48,8 +48,6 @@ var roleHarvester = {
                 }
             }
         }else if(creep.memory.state == "harvest") {
-            
-            //todo: pick up dropped ressources
             if(this.pickupRessources(creep)){
                 return;
             }
