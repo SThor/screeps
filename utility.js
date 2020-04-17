@@ -85,9 +85,7 @@ module.exports = {
                                        // default costs higher so that roads can be lower
                                        plainCost: 2,
                                        swampCost: 10,
-                                       roomCallback: function(roomName) { // use roomCallback to fill costMatrix with creeps, as well as favour roads
-                                         return module.exports.computeCostMatrix(roomName)
-                                       },
+                                       roomCallback: this.computeCostMatrix,
                                      })
         if(path.incomplete == false)
         {
