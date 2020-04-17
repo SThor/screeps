@@ -31,6 +31,14 @@ var roleScout = {
         Memory.visitedRooms.push(creep.room.name);
         delete creep.memory.target;
         delete creep.memory.roomToVisit;
+
+        // Before we go, let's set up a few things
+        creep.room.createFlag(creep.room.find(FIND_STRUCTURES, {filter: 
+                                                            function(object) 
+                                                            {
+                                                              return object.structureType == STRUCTURE_CONTROLLER;
+                                                            }
+                                                          })[0])
       }
       else
       {
