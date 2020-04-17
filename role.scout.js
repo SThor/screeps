@@ -19,16 +19,15 @@ var roleScout = {
           {
             let targetList = creep.room.find(creep.room.findExitTo(exits[exit]));
             creep.memory.target = targetList[0]; //let's just take the first one...
-            console.log(creep.memory.target instanceof RoomPosition)
-            console.log(creep.pos instanceof RoomPosition)
             creep.memory.roomToVisit = exits[exit];
             break;
           }
         }
       }
-      else if(creep.memory.roomToVisit == creep.memory.startingRoom)
+      else if(creep.room.name == creep.memory.roomToVisit)
       {
         // we made it :) let's start over
+        console.log("Visited new room: " + creep.room.name);
         Memory.visitedRooms.push(creep.room.name);
         delete creep.memory.target;
         delete creep.memory.roomToVisit;
