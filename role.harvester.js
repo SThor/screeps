@@ -16,7 +16,7 @@ var roleHarvester = {
     run: function(creep) {
         if(!creep.memory.state) creep.memory.state = "harvest";
 
-        if(creep.store.getFreeCapacity(RESOURCE_ENERGY) == 0 && creep.store.getFreeCapacity() != 0){
+        if(creep.store.getUsedCapacity()>creep.store.getUsedCapacity(RESOURCE_ENERGY)){
             creep.memory.state = "clearTrash"
             creep.say('🗑️ clear trash')
         }
