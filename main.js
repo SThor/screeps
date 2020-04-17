@@ -65,7 +65,12 @@ module.exports.loop = function () {
         var keyArray = max.key.split(' ')
         var posArray = keyArray[3].split(',')
         var roomToBuild = Game.rooms[keyArray[1]]
-        if(roomToBuild.find(FIND_MY_CONSTRUCTION_SITES).length < 5)
+        if(!roomToBuild)
+        {
+          console.log("Room not visible. Let's drop this request");
+          delete Memory.room[max.key];
+        }
+        else if(roomToBuild.find(FIND_MY_CONSTRUCTION_SITES).length < 5)
         {
           var ret = roomToBuild.createConstructionSite(parseInt(posArray[0]), parseInt(posArray[1]), STRUCTURE_ROAD)
           console.log("Result " + ret)
