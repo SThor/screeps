@@ -41,7 +41,7 @@ module.exports = {
 
       if(!room)
       {
-        console.log("Room " + room + " doesn't exist");
+        //console.log("Room " + room + " doesn't exist");
         return;
       }
 
@@ -63,7 +63,7 @@ module.exports = {
 
       global.costs[roomName] = costs
       global.lastComputed = Game.time
-      console.log("Costs computed")
+      //console.log("Costs computed")
     }
 
     return global.costs[roomName];

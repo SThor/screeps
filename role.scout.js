@@ -17,23 +17,31 @@ var roleScout = {
           console.log(exits[exit])
           if(Memory.visitedRooms.filter((room) => room == exits[exit]).length == 0)
           {
-            creep.memory.target = creep.room.findExitTo(exits[exit])
+            let targetList = creep.room.find(creep.room.findExitTo(exits[exit]));
+            creep.memory.target = targetList[0]; //let's just take the first one...
+            console.log(creep.memory.target instanceof RoomPosition)
+            console.log(creep.pos instanceof RoomPosition)
+            creep.memory.roomToVisit = exits[exit];
             break;
           }
         }
       }
-      else if(creep.memory.target.roomName == creep.memory.startingRoom)
+      else if(creep.memory.roomToVisit == creep.memory.startingRoom)
       {
         // we made it :) let's start over
         Memory.visitedRooms.push(creep.room.name);
         delete creep.memory.target;
+        delete creep.memory.roomToVisit;
       }
       else
       {
-        utility.travelTo(creep, creep.memory.target);
+        // need to recreate it because memory stringifies and thus loses classes
+        let target = new RoomPosition(creep.memory.target.x, creep.memory.target.y, creep.memory.target.roomName)
+        utility.travelTo(creep, target);
       }
 
     }
 };
 
 module.exports = roleScout;
+
