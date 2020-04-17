@@ -3,7 +3,7 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
 var structTower = require('struct.tower');
-
+var roleScout = require('role.scout');
 
 var spawner = require('spawn');
 
@@ -37,6 +37,9 @@ module.exports.loop = function () {
         }
         if(creep.memory.role == 'repairer') {
             roleRepairer.run(creep);
+        }
+        if(creep.memory.role == 'scout') {
+            roleScout.run(creep);
         }
     }
 
